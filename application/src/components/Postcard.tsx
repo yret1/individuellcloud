@@ -1,7 +1,8 @@
 "use client";
-import Image from "next/image";
+
 import { useState } from "react";
 import EditPost from "./EditPost";
+import CardTag from "../assets/cardTag.svg";
 
 interface PostcardProps {
   createdAt: string;
@@ -40,7 +41,7 @@ const Postcard: React.FC<PostcardProps> = ({
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
             <g
               id="SVGRepo_tracerCarrier"
               strokeLinecap="round"
@@ -73,7 +74,7 @@ const Postcard: React.FC<PostcardProps> = ({
         <p className="text-slate-950 font-bold font-pt text-xl">-{user}</p>
 
         <div className="w-8 h-8 absolute top-full right-0 flex justify-center items-center">
-          <Image src={"/cardTag.svg"} width={32} height={32} alt="cardtag" />
+          <img src={CardTag} width={32} height={32} alt="cardtag" />
         </div>
       </section>
 

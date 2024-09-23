@@ -1,5 +1,4 @@
-"use client";
-import Postcard from "@/components/Postcard";
+import Postcard from "../components/Postcard";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
@@ -14,19 +13,58 @@ export type Message = {
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
 
+  const [sortIndex, setSortIndex] = useState<number>(0);
+
+  const sortByDate = () => {
+    const sortedMessages = [...messages].sort((a, b) => {
+      if (sortIndex === 0) {
+        return (
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
+      } else {
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+      }
+    });
+
+    setMessages(sortedMessages);
+    setSortIndex(sortIndex === 0 ? 1 : 0);
+  };
+
   useEffect(() => {
-    fetch("/api/getMessages")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setMessages(data);
+    const fetchData = async () => {
+      const response = await fetch(
+        "https://ov973gwig9.execute-api.eu-north-1.amazonaws.com/messages"
+      );
+
+      const data = await response.json();
+
+      console.log(data);
+
+      const sortedData = [...data].sort((a, b) => {
+        return Date.parse(b.createdAt) - Date.parse(a.createdAt);
       });
+
+      setMessages(sortedData);
+    };
+
+    fetchData();
   }, []);
   return (
     <>
       {messages.length > 0 ? (
         <section className="w-screen min-h-dvh bg-mainbg p-4 flex flex-col justify-start pt-20 items-start gap-4">
-          <p className="font-pt font-bold text-white text-2xl">Nya posts</p>
+          <section className="w-full flex justify-between items-center">
+            <p className="font-pt font-bold text-white text-2xl">
+              {sortIndex == 0
+                ? "Nyaste Posts"
+                : sortIndex === 1
+                ? "Äldsta Posts"
+                : ""}
+            </p>
+            <button onClick={sortByDate}>Ändra filter</button>
+          </section>
           <AnimatePresence>
             {messages.map((message, index) => (
               <motion.div

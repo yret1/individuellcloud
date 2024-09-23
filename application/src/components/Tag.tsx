@@ -1,8 +1,6 @@
-import Link from "next/link";
-
 const Tag = () => {
   return (
-    <Link
+    <a
       href={"/"}
       className="h-16 w-12 bg-cta flex justify-center items-end pb-3 fixed shadow-md z-50 top-0 left-10 rounded-b"
     >
@@ -18,7 +16,7 @@ const Tag = () => {
           fill="#082756"
         />
       </svg>
-    </Link>
+    </a>
   );
 };
 

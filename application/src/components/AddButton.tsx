@@ -1,18 +1,14 @@
-"use client";
-
-import Link from "next/link";
-
-import { usePathname } from "next/navigation";
+import { Link, useLocation } from "react-router-dom";
 
 const Addbutton = () => {
-  const path = usePathname();
+  const path = useLocation();
 
-  if (path === "/newPost") {
+  if (path.pathname === "/newPost") {
     return null;
   } else {
     return (
       <Link
-        href={"/newPost"}
+        to={"/newPost"}
         className="fixed bottom-5 right-5 shadow-md bg-cta flex justify-center p-2 rounded-md z-50 items-center"
       >
         <svg

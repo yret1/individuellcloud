@@ -1,25 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { Message } from "../page";
+import { Message } from "./Home";
 import { AnimatePresence, motion } from "framer-motion";
-import Postcard from "@/components/Postcard";
+import Postcard from "../components/Postcard";
 
-const Page = () => {
+const FindPosts = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loadning, setLoading] = useState<boolean>(false);
   const [searchUser, setSearchUser] = useState<string>("");
 
   const searchUserPosts = async () => {
     setLoading(true);
-    const response = await fetch("/api/searchUserPosts", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        user: searchUser,
-      }),
+
+    const url = `https://ov973gwig9.execute-api.eu-north-1.amazonaws.com/messages/${searchUser}`;
+    const response = await fetch(url, {
+      method: "GET",
     });
     if (response.ok) {
       const data = await response.json();
@@ -81,4 +77,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default FindPosts;

@@ -1,18 +1,16 @@
 "use client";
 
-import Link from "next/link";
-
-import { usePathname } from "next/navigation";
+import { Link, useLocation } from "react-router-dom";
 
 const Searchbutton = () => {
-  const path = usePathname();
+  const path = useLocation();
 
-  if (path === "/newPost") {
+  if (path.pathname === "/newPost") {
     return null;
   } else {
     return (
       <Link
-        href={"/searchUserPosts"}
+        to={"/searchPosts"}
         className="fixed top-0 right-10 shadow-md bg-cta flex justify-center p-2 rounded-b w-12 z-50 items-center"
       >
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

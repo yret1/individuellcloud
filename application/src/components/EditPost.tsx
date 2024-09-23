@@ -24,15 +24,13 @@ const EditPost: React.FC<EditPostProps> = ({
       alert("Du måste fylla i ett meddelande");
       return;
     }
-    const response = await fetch("/api/updatePost", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+
+    const url = `https://ov973gwig9.execute-api.eu-north-1.amazonaws.com/editPost/${user}/${id}`;
+    const response = await fetch(url, {
+      method: "PUT",
+
       body: JSON.stringify({
-        id: id,
         message: newMessage,
-        user: user,
       }),
     });
     if (response.ok) {
