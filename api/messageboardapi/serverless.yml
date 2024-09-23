@@ -6,43 +6,54 @@ service: messageboardapi
 provider:
   name: aws
   runtime: nodejs20.x
+  region: eu-north-1
+  iam:
+    role: arn:aws:iam::767397735922:role/Codedeployer
+
+
+package:
+  individually: true
 
 functions:
   getMessages:
     handler: functions/getMessages.handler
-      events:
-        - httpApi:
-            path: /messages
-            method: get
+    events:
+      - httpApi:
+          path: /messages
+          method: get
   postMessage:
     handler: functions/addMessage.handler
-      events:
-        - httpApi:
-            path: /addMessage
-            method: post
+    events:
+      - httpApi:
+          path: /addMessage
+          method: post
   getSpecific:
     handler: functions/getSpecific.handler
-      events:
-        - httpApi:
-            path: /messages/{user}
-            method: get
+    events:
+      - httpApi:
+          path: /messages/{user}
+          method: get
   editPost:
     handler: functions/editPost.handler
-      events:
-        - httpApi:
-            path: /editPost
-            method: put
-
+    events:
+      - httpApi:
+          path: /editPost/{user}/{id}
+          method: put
 
 resources:
   Resources:
     MessageBoardTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: MessageBoardTable
+        TableName: MessageBoardsTable
         AttributeDefinitions:
           - AttributeName: user
+            AttributeType: S
+          - AttributeName: id
             AttributeType: S
         KeySchema:
           - AttributeName: user
             KeyType: HASH
+          - AttributeName: id
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST

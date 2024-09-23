@@ -11,7 +11,12 @@ exports.handler = async (event) => {
 
   const id = uuidv4();
 
+  console.log("id" + id);
+
   const { user, message } = body;
+
+  console.log("user" + user);
+  console.log("message" + message);
 
   if (!user || !message) {
     return {
@@ -38,6 +43,7 @@ exports.handler = async (event) => {
       body: JSON.stringify("Message added!"),
     };
   } catch (error) {
+    console.error(error);
     return {
       statusCode: 500,
       body: JSON.stringify({ message: "Could not add message" }),

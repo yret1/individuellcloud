@@ -1,12 +1,9 @@
-const { DynamoDB } = require("@aws-sdk/client-dynamodb");
-const { DynamoDBDocument } = require("@aws-sdk/lib-dynamodb");
+const AWS = require("aws-sdk");
 
-const client = new DynamoDB({
+const db = new AWS.DynamoDB.DocumentClient({
   region: "eu-north-1",
 });
 
-const db = DynamoDBDocument.from(client);
-
-const tablename = "messageboard";
+const tablename = "MessageBoardsTable";
 
 module.exports = { db, tablename };

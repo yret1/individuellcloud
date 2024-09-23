@@ -5,53 +5,68 @@ exports.handler = async (event) => {
   const id = event.pathParameters.id;
   const table = tablename;
 
-  const message = await db
-    .scan({ TableName: table, user: user, id: id })
-    .promise();
-
-  if (message) {
-    const body = JSON.parse(event.body);
-    const { message } = body;
-
-    if (!user || !message) {
+  try {
+    // Does message to edit exist?
+    const result = await db
+      .query({
+        TableName: table,
+        KeyConditionExpression: "#usr = :user AND #id = :id",
+        ExpressionAttributeNames: {
+          "#usr": "user",
+          "#id": "id",
+        },
+        ExpressionAttributeValues: {
+          ":user": user,
+          ":id": id,
+        },
+      })
+      .promise();
+    if (result.Items.length === 0) {
       return {
-        statusCode: 400,
+        statusCode: 404,
         body: JSON.stringify({
-          message: "User and message are both required",
+          message: "Could not find the message you are trying to edit",
         }),
       };
     }
 
-    try {
-      const editedMessage = await db
-        .update({
-          TableName: table,
-          Key: {
-            id: id,
-            user: user,
-          },
-          UpdateExpression: "set message = :m",
-          ExpressionAttributeValues: {
-            ":m": message,
-          },
-        })
-        .promise();
+    const body = JSON.parse(event.body);
+    const { message } = body;
 
+    if (!message) {
       return {
-        statusCode: 200,
-        body: JSON.stringify("Message updated!"),
-      };
-    } catch (error) {
-      return {
-        statusCode: 500,
-        body: JSON.stringify({ message: "Could not update message" }),
+        statusCode: 400,
+        body: JSON.stringify({
+          message: "Message is required",
+        }),
       };
     }
-  } else {
+
+    // Update Post
+    await db
+      .update({
+        TableName: table,
+        Key: {
+          user: user,
+          id: id,
+        },
+        UpdateExpression: "set message = :message",
+        ExpressionAttributeValues: {
+          ":message": message,
+        },
+      })
+      .promise();
+
     return {
-      statusCode: 404,
+      statusCode: 200,
+      body: JSON.stringify("Message updated!"),
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
       body: JSON.stringify({
-        message: "Could not find the message you are trying to edit",
+        message: "Could not update message",
+        error: error.message,
       }),
     };
   }
