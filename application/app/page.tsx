@@ -25,6 +25,7 @@ export default function Home() {
     <>
       {messages.length > 0 ? (
         <section className="w-screen min-h-dvh bg-mainbg p-4 flex flex-col justify-start pt-20 items-start gap-4">
+          <p className="font-pt font-bold text-white text-2xl">Nya posts</p>
           <AnimatePresence>
             {messages.map((message, index) => (
               <motion.div
