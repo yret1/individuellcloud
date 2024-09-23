@@ -1,0 +1,48 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: gustavssondev
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: messageboardapi
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+
+functions:
+  getMessages:
+    handler: functions/getMessages.handler
+      events:
+        - httpApi:
+            path: /messages
+            method: get
+  postMessage:
+    handler: functions/addMessage.handler
+      events:
+        - httpApi:
+            path: /addMessage
+            method: post
+  getSpecific:
+    handler: functions/getSpecific.handler
+      events:
+        - httpApi:
+            path: /messages/{user}
+            method: get
+  editPost:
+    handler: functions/editPost.handler
+      events:
+        - httpApi:
+            path: /editPost
+            method: put
+
+
+resources:
+  Resources:
+    MessageBoardTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: MessageBoardTable
+        AttributeDefinitions:
+          - AttributeName: user
+            AttributeType: S
+        KeySchema:
+          - AttributeName: user
+            KeyType: HASH
