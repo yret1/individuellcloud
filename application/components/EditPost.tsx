@@ -39,6 +39,7 @@ const EditPost: React.FC<EditPostProps> = ({
       alert("Meddelandet har uppdaterats!");
       setNewMessage("");
       confirmEdit(false);
+      window.location.reload();
     }
   };
 
