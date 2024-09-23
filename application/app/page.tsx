@@ -2,6 +2,7 @@
 import Postcard from "@/components/Postcard";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 export type Message = {
   id: string;
@@ -42,7 +43,13 @@ export default function Home() {
           </AnimatePresence>
         </section>
       ) : (
-        <section className="w-screen min-h-dvh bg-mainbg p-4 flex flex-col justify-start pt-20 items-start gap-4"></section>
+        <section className="w-screen min-h-dvh bg-mainbg p-4 flex flex-col justify-center pt-20 items-center gap-4">
+          <DotLottieReact
+            loop
+            autoplay
+            src="https://lottie.host/2b1d1c40-e52e-4015-a80f-c40c1bb06a40/jsMd7wxzV0.json"
+          />
+        </section>
       )}
     </>
   );
